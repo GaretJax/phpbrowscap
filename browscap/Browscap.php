@@ -21,7 +21,7 @@
  *
  * @package    Browscap
  * @author     Jonathan Stoppani <st.jonathan@gmail.com>
- * @copyright  Copyright (c) 2006 Jonathan Stoppani
+ * @copyright  Copyright (c) 2006-2008 Jonathan Stoppani
  * @version    0.7
  * @license    http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License
  * @link       http://garetjax.info/projects/browscap/
@@ -90,7 +90,7 @@ class Browscap
 	 *	                an UPDATE_* constant, null or false.
 	 */
 	public $remoteIniUrl    = 'http://browsers.garykeith.com/stream.asp?BrowsCapINI';
-	public $remoteVerUrl    = 'http://browsers.garykeith.com/version-date.asp';
+	public $remoteVerUrl    = 'http://browsers.garykeith.com/versions/version-date.asp';
 	public $timeout         = 5;
 	public $updateInterval  = 432000; // 5 days
 	public $errorInterval   = 7200;   // 2 hours
@@ -655,7 +655,7 @@ class Browscap
  *
  * @package    Browscap
  * @author     Jonathan Stoppani <st.jonathan@gmail.com>
- * @copyright  Copyright (c) 2006 Jonathan Stoppani
+ * @copyright  Copyright (c) 2006-2008 Jonathan Stoppani
  * @license    http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License
  * @link       http://garetjax.info/projects/browscap/
  */
