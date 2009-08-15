@@ -90,7 +90,7 @@ class Browscap
 	 *	                an UPDATE_* constant, null or false.
 	 */
 	public $remoteIniUrl    = 'http://browsers.garykeith.com/stream.asp?BrowsCapINI';
-	public $remoteVerUrl    = 'http://browsers.garykeith.com/versions/version-date.asp';
+	public $remoteVerUrl    = 'http://updates.browserproject.com/version-date.asp';
 	public $timeout         = 5;
 	public $updateInterval  = 432000; // 5 days
 	public $errorInterval   = 7200;   // 2 hours
