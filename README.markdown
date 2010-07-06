@@ -7,8 +7,8 @@ _Hacking around with PHP to have a better solution than `get_browser()`_
 Introduction
 ------------
 
-The http://browsers.garykeith.com/downloads.asp browscap.ini file is a
-database maintained by Gary Keith at http://browsers.garykeith.com/ which
+The [browscap.ini](http://browsers.garykeith.com/downloads.asp) file is a
+database maintained by [Gary Keith](http://browsers.garykeith.com/) which
 provides a lot of details about browsers and their capabilities, such as name,
 versions, Javascript support and so on.
 
@@ -61,6 +61,7 @@ or for basic support write to:
  * jonathan.stoppani@gmail.com
 
 Also via instant messenger:
+
  * AIM: garetjax@mac.com
  * MSN: st.jonathan@gmail.com
  * ICQ: 322754291
