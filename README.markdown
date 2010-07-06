@@ -46,8 +46,8 @@ Here is a non-exaustive feature list of the Browscap class:
  * Auto updated browscap.ini file and cache from remote server with version checking
  * Configurable remote update server
  * Fully configurable (since 0.2)
- * --PHP4 and-- PHP5 compatible (PHP4 version deprecated)
- * Released under the GNU Lesser General Public License
+ * <del>PHP4 and</del> PHP5 compatible (PHP4 version deprecated)
+ * Released under the MIT License
 
 
 Contact
