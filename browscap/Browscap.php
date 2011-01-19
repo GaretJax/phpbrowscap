@@ -111,7 +111,7 @@ class Browscap
 	 *
 	 * @var string
 	 */
-	public $userAgent		= 'PHP Browser Capabilities Project/%v %m';
+	public $userAgent		= 'Browser Capabilities Project - PHP Browscap/%v %m';
 
 	/**
 	 * Flag to enable only lowercase indexes in the result.
@@ -574,6 +574,8 @@ class Browscap
 	 */
 	private function _getRemoteData($url)
 	{
+		ini_set('user_agent', $this->_getUserAgent());
+		
 		switch ($this->_getUpdateMethod()) {
 			case self::UPDATE_LOCAL:
 				$file = file_get_contents($url);
