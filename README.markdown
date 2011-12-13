@@ -58,7 +58,7 @@ _Because your opinion matters._
 If only to say "Hello, it works!", or to ask for a feature or report a bug,
 or for basic support write to:
  
- * jonathan.stoppani@gmail.com
+ * jonathan@stoppani.name
 
 Also via instant messenger:
 
