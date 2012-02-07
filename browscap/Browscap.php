@@ -163,17 +163,17 @@ class Browscap
 	 *
 	 * @var bool
 	 */
-	private $_cacheLoaded = false;
+	protected $_cacheLoaded = false;
 
 	/**
 	 * Where to store the value of the included PHP cache file
 	 *
 	 * @var array
 	 */
-	private $_userAgents = array();
-	private $_browsers = array();
-	private $_patterns = array();
-	private $_properties = array();
+	protected $_userAgents = array();
+	protected $_browsers = array();
+	protected $_patterns = array();
+	protected $_properties = array();
 
 	/**
 	 * Constructor class, checks for the existence of (and loads) the cache and
@@ -392,7 +392,7 @@ class Browscap
 	 *
 	 * @return void
 	 */
-	private function _loadCache($cache_file)
+	protected function _loadCache($cache_file)
 	{
 		require $cache_file;
 
@@ -409,7 +409,7 @@ class Browscap
 	 *
 	 * @return string the PHP string to save into the cache file
 	 */
-	private function _buildCache()
+	protected function _buildCache()
 	{
 		$cacheTpl = "<?php\n\$properties=%s;\n\$browsers=%s;\n\$userAgents=%s;\n\$patterns=%s;\n";
 
@@ -436,7 +436,7 @@ class Browscap
 	 * @throws Browscap_Exception
 	 * @return bool if the ini file was updated
 	 */
-	private function _getRemoteIniFile($url, $path)
+	protected function _getRemoteIniFile($url, $path)
 	{
 		// Check version
 		if (file_exists($path) && filesize($path)) {
@@ -489,7 +489,7 @@ class Browscap
 	 * @throws Browscap_Exception
 	 * @return int the remote modification timestamp
 	 */
-	private function _getRemoteMTime()
+	protected function _getRemoteMTime()
 	{
 		$remote_datetime = $this->_getRemoteData($this->remoteVerUrl);
 		$remote_tmstp = strtotime($remote_datetime);
@@ -507,7 +507,7 @@ class Browscap
 	 * @throws Browscap_Exception
 	 * @return int the local modification timestamp
 	 */
-	private function _getLocalMTime()
+	protected function _getLocalMTime()
 	{
 		if (!is_readable($this->localFile) || !is_file($this->localFile)) {
 			throw new Browscap_Exception("Local file is not readable");
@@ -525,7 +525,7 @@ class Browscap
 	 * @param array $array the array to parse and convert
 	 * @return string the array parsed into a PHP string
 	 */
-	private function _array2string($array)
+	protected function _array2string($array)
 	{
 		$strings = array();
 
@@ -558,7 +558,7 @@ class Browscap
 	 *
 	 * @return string the name of function to use to retrieve the file
 	 */
-	private function _getUpdateMethod()
+	protected function _getUpdateMethod()
 	{
 		// Caches the result
 		if ($this->updateMethod === null) {
@@ -585,7 +585,7 @@ class Browscap
 	 * @throws Browscap_Exception
 	 * @return string the retrieved data
 	 */
-	private function _getRemoteData($url)
+	protected function _getRemoteData($url)
 	{
 		ini_set('user_agent', $this->_getUserAgent());
 		
@@ -667,7 +667,7 @@ class Browscap
 	 *
 	 * @return string the formatted user agent
 	 */
-	private function _getUserAgent()
+	protected function _getUserAgent()
 	{
 		$ua = str_replace('%v', self::VERSION, $this->userAgent);
 		$ua = str_replace('%m', $this->_getUpdateMethod(), $ua);
