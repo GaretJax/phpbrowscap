@@ -64,6 +64,6 @@ Please report your issues and ask for new features on the GitHub Issue Tracker
 at https://github.com/GaretJax/phpbrowscap/issues
 
 Please note that the browscap class only parses and queries the browscap.ini
-database provided by Gary Keith. If a browser if wrongly identified or a results
+database provided by Gary Keith. If a browser is wrongly identified or a results
 presents erroneous properties, please refer directly to the browscap project
 homepage at: http://browsers.garykeith.com/
