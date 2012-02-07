@@ -28,7 +28,7 @@
  * @package    Browscap
  * @author     Jonathan Stoppani <jonathan@stoppani.name>
  * @copyright  Copyright (c) 2006-2012 Jonathan Stoppani
- * @version    0.7
+ * @version    1.0
  * @license    http://www.opensource.org/licenses/MIT MIT License
  * @link       https://github.com/GaretJax/phpbrowscap/
  */
@@ -37,7 +37,7 @@ class Browscap
 	/**
 	 * Current version of the class.
 	 */
-	const VERSION = '0.7';
+	const VERSION = '1.0';
 
 	/**
 	 * Different ways to access remote and local files.
@@ -682,7 +682,7 @@ class Browscap
  * @package    Browscap
  * @author     Jonathan Stoppani <jonathan@stoppani.name>
  * @copyright  Copyright (c) 2006-2012 Jonathan Stoppani
- * @version    0.7
+ * @version    1.0
  * @license    http://www.opensource.org/licenses/MIT MIT License
  * @link       https://github.com/GaretJax/phpbrowscap/*/
 class Browscap_Exception extends Exception
