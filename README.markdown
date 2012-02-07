@@ -3,6 +3,7 @@ Browser Capabilities PHP Project
 
 _Hacking around with PHP to have a better solution than `get_browser()`_
 
+This is a slightly modified version of the original. The Browscap class is now added to a 'phpbrowscap' namespace, and a composer document has been added.
 
 Introduction
 ------------
@@ -33,6 +34,9 @@ Quick start
 
 A quick start guide is available on the GitHub wiki, at the following address:
 https://github.com/GaretJax/phpbrowscap/wiki/QuickStart
+
+include 'src/phpbrowscap/Browscap.php';
+  use phpbrowscap\Browscap;
 
 
 Features
