@@ -192,7 +192,14 @@ class Browscap
 			);
 		}
 
-		$cache_dir = realpath($cache_dir);
+		$old_cache_dir = $cache_dir;
+        	$cache_dir = realpath($cache_dir);
+
+        	if (false === $cache_dir) {
+            		throw new Browscap_Exception(
+                		sprintf('The cache path %s is invalid. Are you sure that it exists and that you have permission to access it?', $old_cache_dir)
+            		);
+		}
 
 		// Is the cache dir really the directory or is it directly the file?
 		if (substr($cache_dir, -4) === '.php') {
