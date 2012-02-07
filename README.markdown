@@ -28,6 +28,13 @@ It offers methods to update, cache, adapt and get details about every supplied
 user agent on a standalone basis.
 
 
+Quick start
+-----------
+
+A quick start guide is available on the GitHub wiki, at the following address:
+https://github.com/GaretJax/phpbrowscap/wiki/QuickStart
+
+
 Features
 --------
 
@@ -50,20 +57,13 @@ Here is a non-exaustive feature list of the Browscap class:
  * Released under the MIT License
 
 
-Contact
--------
+Issues and feature requests
+---------------------------
 
-_Because your opinion matters._
+Please report your issues and ask for new features on the GitHub Issue Tracker
+at https://github.com/GaretJax/phpbrowscap/issues
 
-If only to say "Hello, it works!", or to ask for a feature or report a bug,
-or for basic support write to:
- 
- * jonathan@stoppani.name
-
-Also via instant messenger:
-
- * AIM: garetjax@mac.com
- * MSN: st.jonathan@gmail.com
- * ICQ: 322754291
- * Yahoo: g4retj4x
- * GTalk: st.jonathan@gmail.com
+Please note that the browscap class only parses and queries the browscap.ini
+database provided by Gary Keith. If a browser if wrongly identified or a results
+presents erroneous properties, please refer directly to the browscap project
+homepage at: http://browsers.garykeith.com/
