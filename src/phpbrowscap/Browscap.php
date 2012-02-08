@@ -1,5 +1,7 @@
 <?php
 
+namespace phpbrowscap;
+
 /**
  * Browscap.ini parsing class with caching and update capabilities
  *
