@@ -27,6 +27,8 @@ Browscap is a standalone class for PHP5 that gets around the limitations of
 It offers methods to update, cache, adapt and get details about every supplied
 user agent on a standalone basis.
 
+Browscap is a [Composer](http://packagist.org/about-composer) package.
+
 
 Quick start
 -----------
