@@ -687,6 +687,6 @@ class Browscap
  * @version    1.0
  * @license    http://www.opensource.org/licenses/MIT MIT License
  * @link       https://github.com/GaretJax/phpbrowscap/*/
-class Browscap_Exception extends Exception
+class Browscap_Exception extends \Exception
 {}
 
