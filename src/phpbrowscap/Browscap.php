@@ -601,47 +601,51 @@ class Browscap
 					throw new Browscap_Exception('Cannot open the local file');
 				}
 			case self::UPDATE_FOPEN:
-				$file = file_get_contents($url);
-
-				if ($file !== false) {
-					return $file;
+				if (ini_get('allow_url_fopen') && function_exists('file_get_contents')) {
+					$file = file_get_contents($url);
+	
+					if ($file !== false) {
+						return $file;
+					}
 				} // else try with the next possibility (break omitted)
 			case self::UPDATE_FSOCKOPEN:
-				$remote_url = parse_url($url);
-				$remote_handler = fsockopen($remote_url['host'], 80, $c, $e, $this->timeout);
-
-				if ($remote_handler) {
-					stream_set_timeout($remote_handler, $this->timeout);
-
-					if (isset($remote_url['query'])) {
-						$remote_url['path'] .= '?' . $remote_url['query'];
-					}
-
-					$out = sprintf(
-						self::REQUEST_HEADERS,
-						$remote_url['path'],
-						$remote_url['host'],
-						$this->_getUserAgent()
-					);
-
-					fwrite($remote_handler, $out);
-
-					$response = fgets($remote_handler);
-					if (strpos($response, '200 OK') !== false) {
-						$file = '';
-						while (!feof($remote_handler)) {
-							$file .= fgets($remote_handler);
+				if (function_exists('fsockopen')) {
+					$remote_url = parse_url($url);
+					$remote_handler = fsockopen($remote_url['host'], 80, $c, $e, $this->timeout);
+	
+					if ($remote_handler) {
+						stream_set_timeout($remote_handler, $this->timeout);
+	
+						if (isset($remote_url['query'])) {
+							$remote_url['path'] .= '?' . $remote_url['query'];
 						}
-
-						$file = str_replace("\r\n", "\n", $file);
-						$file = explode("\n\n", $file);
-						array_shift($file);
-
-						$file = implode("\n\n", $file);
-
-						fclose($remote_handler);
-
-						return $file;
+	
+						$out = sprintf(
+							self::REQUEST_HEADERS,
+							$remote_url['path'],
+							$remote_url['host'],
+							$this->_getUserAgent()
+						);
+	
+						fwrite($remote_handler, $out);
+	
+						$response = fgets($remote_handler);
+						if (strpos($response, '200 OK') !== false) {
+							$file = '';
+							while (!feof($remote_handler)) {
+								$file .= fgets($remote_handler);
+							}
+	
+							$file = str_replace("\r\n", "\n", $file);
+							$file = explode("\n\n", $file);
+							array_shift($file);
+	
+							$file = implode("\n\n", $file);
+	
+							fclose($remote_handler);
+	
+							return $file;
+						}
 					}
 				} // else try with the next possibility
 			case self::UPDATE_CURL:
