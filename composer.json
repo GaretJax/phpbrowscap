@@ -2,7 +2,7 @@
     "name": "garetjax/phpbrowscap",
     "type": "library",
     "description": "Standalone replacement for php's native get_browser() function",
-    "keywords": ["get_browser", "browser", "capabilities"],
+    "keywords": ["get_browser", "browser", "capabilities", "user agent"],
     "homepage": "http://github.com/GaretJax/phpbrowscap",
     "license": "MIT License",
     "authors": [
