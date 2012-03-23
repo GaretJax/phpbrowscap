@@ -31,6 +31,7 @@ use \Exception as BaseException;
  *
  * @package    Browscap
  * @author     Jonathan Stoppani <jonathan@stoppani.name>
+ * @author     Vítor Brandão <noisebleed@noiselabs.org>
  * @copyright  Copyright (c) 2006-2012 Jonathan Stoppani
  * @version    1.0
  * @license    http://www.opensource.org/licenses/MIT MIT License
@@ -180,6 +181,28 @@ class Browscap
     protected $_properties = array();
 
     /**
+     * An associative array of associative arrays in the format
+     * `$arr['wrapper']['option'] = $value` passed to stream_context_create()
+     * when building a stream resource.
+     *
+     * Proxy settings are stored in this variable.
+     *
+     * @see http://www.php.net/manual/en/function.stream-context-create.php
+     *
+     * @var array
+     */
+    protected $_streamContextOptions = array();
+
+    /**
+     * A valid context resource created with stream_context_create().
+     *
+     * @see http://www.php.net/manual/en/function.stream-context-create.php
+     *
+     * @var resource
+     */
+    protected $_streamContext = null;
+
+    /**
      * Constructor class, checks for the existence of (and loads) the cache and
      * if needed updated the definitions
      *
@@ -309,6 +332,109 @@ class Browscap
     }
 
     /**
+     * Load (auto-set) proxy settings from environment variables.
+     */
+    public function autodetectProxySettings()
+    {
+        $wrappers = array('http', 'https', 'ftp');
+
+        foreach ($wrappers as $wrapper) {
+            $url = getenv($wrapper.'_proxy');
+            if (!empty($url)) {
+                $params = array_merge(array(
+                    'port'  => null,
+                    'user'  => null,
+                    'pass'  => null,
+                    ), parse_url($url));
+                $this->addProxySettings($params['host'], $params['port'], $wrapper, $params['user'], $params['pass']);
+            }
+        }
+    }
+
+    /**
+     * Add proxy settings to the stream context array.
+     *
+     * @param string $server    Proxy server/host
+     * @param int    $port      Port
+     * @param string $wrapper   Wrapper: "http", "https", "ftp", others...
+     * @param string $username  Username (when requiring authentication)
+     * @param string $password  Password (when requiring authentication)
+     *
+     * @return Browscap
+     */
+    public function addProxySettings($server, $port = 3128, $wrapper = 'http', $username = null, $password = null)
+    {
+        $settings = array($wrapper => array(
+            'proxy'             => sprintf('tcp://%s:%d', $server, $port),
+            'request_fulluri'   => true,
+        ));
+
+        // Proxy authentication (optional)
+        if (isset($username) && isset($password)) {
+            $settings[$wrapper]['header'] = 'Proxy-Authorization: Basic '.base64_encode($username.':'.$password);
+        }
+
+        // Add these new settings to the stream context options array
+        $this->_streamContextOptions = array_merge(
+            $this->_streamContextOptions,
+            $settings
+        );
+
+        /* Return $this so we can chain addProxySettings() calls like this:
+         * $browscap->
+         *   addProxySettings('http')->
+         *   addProxySettings('https')->
+         *   addProxySettings('ftp');
+         */
+        return $this;
+    }
+
+    /**
+     * Clear proxy settings from the stream context options array.
+     *
+     * @param string $wrapper Remove settings from this wrapper only
+     *
+     * @return array Wrappers cleared
+     */
+    public function clearProxySettings($wrapper = null)
+    {
+        $wrappers = isset($wrapper) ? array($wrappers) : array_keys($this->_streamContextOptions);
+
+        $affectedProtocols = array();
+        $options = array('proxy', 'request_fulluri', 'header');
+        foreach ($wrappers as $wrapper) {
+
+            // remove wrapper options related to proxy settings
+            if (isset($this->_streamContextOptions[$wrapper]['proxy'])) {
+                foreach ($options as $option){
+                    unset($this->_streamContextOptions[$wrapper][$option]);
+                }
+
+                // remove wrapper entry if there are no other options left
+                if (empty($this->_streamContextOptions[$wrapper])) {
+                    unset($this->_streamContextOptions[$wrapper]);
+                }
+
+                $clearedWrappers[] = $wrapper;
+            }
+        }
+
+        return $clearedWrappers;
+    }
+
+    /**
+     * Returns the array of stream context options.
+     *
+     * @note Added for debug purposes. Remove at will.
+     *
+     * @return array
+     */
+    public function getStreamContextOptions()
+    {
+        return $this->_streamContextOptions;
+    }
+
+    /**
      * Parses the ini file and updates the cache files
      *
      * @return bool whether the file was correctly written to the disk
@@ -429,6 +555,20 @@ class Browscap
             $userAgentsArray,
             $patternsArray
         );
+    }
+
+    /**
+     * Lazy getter for the stream context resource.
+     *
+     * @return resource
+     */
+    protected function _getStreamContext($recreate = false)
+    {
+        if (!isset($this->_streamContext) || true === $recreate) {
+            $this->_streamContext = stream_context_create($this->_streamContextOptions);
+        }
+
+        return $this->_streamContext;
     }
 
     /**
@@ -605,7 +745,9 @@ class Browscap
                     throw new Exception('Cannot open the local file');
                 }
             case self::UPDATE_FOPEN:
-                $file = file_get_contents($url);
+                // include proxy settings in the file_get_contents() call
+                $context = $this->_getStreamContext();
+                $file = file_get_contents($url, false, $context);
 
                 if ($file !== false) {
                     return $file;
