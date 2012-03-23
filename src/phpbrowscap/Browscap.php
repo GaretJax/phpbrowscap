@@ -425,8 +425,6 @@ class Browscap
     /**
      * Returns the array of stream context options.
      *
-     * @note Added for debug purposes. Remove at will.
-     *
      * @return array
      */
     public function getStreamContextOptions()
