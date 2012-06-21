@@ -516,6 +516,32 @@ class Browscap
     }
 
     /**
+     * Execute the callback passed to it depending on the given rules
+     *
+     * @param array    rules
+     * @param callback callback
+     * @param operator string
+     *
+     * @return void
+     */
+    public function action($rules, $callback, $operator = '>')
+    {
+        if (is_string($callback) || !is_callable($callback)) {
+            throw new Exception("The second argument you passed isn't a callback!");
+        }
+
+        $browser = $this->getBrowser();
+
+        $platform = array_key_exists($browser->Platform, $rules) ? $browser->Platform : 'default';
+
+        if (array_key_exists($browser->Browser, $rules[$platform])) {
+            if (version_compare($rules[$platform][$browser->Browser], $browser->Version, $operator)) {
+                return call_user_func($callback, $browser);
+            }
+        }
+    }
+
+    /**
      * Loads the cache into object's properties
      *
      * @return void
