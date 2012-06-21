@@ -524,13 +524,13 @@ class Browscap
      *
      * @return void
      */
-    public function action($rules, $callback, $operator = '>')
+    public function action($rules, $callback, $operator = '>', $userAgent = null)
     {
         if (is_string($callback) || !is_callable($callback)) {
             throw new Exception("The second argument you passed isn't a callback!");
         }
 
-        $browser = $this->getBrowser();
+        $browser = $this->getBrowser($userAgent);
 
         $platform = array_key_exists($browser->Platform, $rules) ? $browser->Platform : 'default';
 

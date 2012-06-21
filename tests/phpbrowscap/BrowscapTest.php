@@ -98,6 +98,32 @@ class BrowscapTest extends TestCase
 
         $this->assertTrue(is_resource($resource));
     }
+
+    public function testAction()
+    {
+        $browscap = new BrowscapForTest($this->createCacheDir());
+
+        $callback = function() { return true; };
+        $rules    = array(
+            'WinXP'   => array(
+              'Chrome'  => '20.2',
+              'Safari'  => '5.0',
+            ),
+            'default' => array(
+              'Chrome'  => '4.0',
+              'IE'      => '7',
+            )
+        );
+
+        $chromeWinUserAgent    = 'Mozilla/5.0 (Windows NT 5.1) AppleWebKit/536.6 (KHTML, like Gecko) Chrome/20.0.1089.0 Safari/536.6';
+        $firefoxLinuxUserAgent = 'Mozilla/5.0 (X11; Linux x86_64; rv:12.0) Gecko/20100101 Firefox/12.0';
+
+        $this->assertTrue($browscap->action($rules, $callback, '>', $chromeWinUserAgent));
+        unset($rules['WinXP']);
+        $this->assertNull($browscap->action($rules, $callback, '>', $chromeWinUserAgent));
+        $this->assertTrue($browscap->action($rules, $callback, '<', $chromeWinUserAgent));
+        $this->assertNull($browscap->action($rules, $callback, '>', $firefoxLinuxUserAgent));
+    }
 }
 
 class BrowscapForTest extends Browscap

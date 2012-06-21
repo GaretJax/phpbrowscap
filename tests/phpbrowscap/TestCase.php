@@ -69,6 +69,8 @@ class TestCase extends \PHPUnit_Framework_TestCase
     protected function removeCacheDir()
     {
         if (isset($this->cacheDir) && is_dir($this->cacheDir)) {
+            @unlink($this->cacheDir.'/browscap.ini');
+            @unlink($this->cacheDir.'/cache.php');
             if (false === @rmdir($this->cacheDir)) {
                 throw new \RuntimeException(sprintf('Unable to remove the "%s" directory', $this->cacheDir));
             }
