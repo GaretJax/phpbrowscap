@@ -31,6 +31,7 @@ use phpbrowscap\Browscap;
  *
  * @package    Browscap
  * @author     Vítor Brandão <noisebleed@noiselabs.org>
+ * @author     Samy Dindane  <samy@dindane.com>
  * @copyright  Copyright (c) 2006-2012 Jonathan Stoppani
  * @version    1.0
  * @license    http://www.opensource.org/licenses/MIT MIT License
@@ -69,6 +70,8 @@ class TestCase extends \PHPUnit_Framework_TestCase
     protected function removeCacheDir()
     {
         if (isset($this->cacheDir) && is_dir($this->cacheDir)) {
+            @unlink($this->cacheDir.'/browscap.ini');
+            @unlink($this->cacheDir.'/cache.php');
             if (false === @rmdir($this->cacheDir)) {
                 throw new \RuntimeException(sprintf('Unable to remove the "%s" directory', $this->cacheDir));
             }

@@ -31,7 +31,8 @@ use \Exception as BaseException;
  *
  * @package    Browscap
  * @author     Jonathan Stoppani <jonathan@stoppani.name>
- * @author     Vítor Brandão <noisebleed@noiselabs.org>
+ * @author     Vítor Brandão     <noisebleed@noiselabs.org>
+ * @author     Samy Dindane      <samy@dindane.com>
  * @copyright  Copyright (c) 2006-2012 Jonathan Stoppani
  * @version    1.0
  * @license    http://www.opensource.org/licenses/MIT MIT License
@@ -513,6 +514,32 @@ class Browscap
 
         // Save and return
         return (bool) file_put_contents($cache_path, $cache, LOCK_EX);
+    }
+
+    /**
+     * Execute the callback passed to it depending on the given rules
+     *
+     * @param array    rules
+     * @param callback callback
+     * @param operator string
+     *
+     * @return void
+     */
+    public function action($rules, $callback, $operator = '>', $userAgent = null)
+    {
+        if (is_string($callback) || !is_callable($callback)) {
+            throw new Exception("The second argument you passed isn't a callback!");
+        }
+
+        $browser = $this->getBrowser($userAgent);
+
+        $platform = array_key_exists($browser->Platform, $rules) ? $browser->Platform : 'default';
+
+        if (array_key_exists($browser->Browser, $rules[$platform])) {
+            if (version_compare($rules[$platform][$browser->Browser], $browser->Version, $operator)) {
+                return call_user_func($callback, $browser);
+            }
+        }
     }
 
     /**
