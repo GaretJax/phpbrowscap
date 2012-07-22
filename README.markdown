@@ -23,7 +23,7 @@ Since in most shared hosting environments you have not access to the php.ini
 file, the browscap directive cannot be modified and you are stuck with either
 and outdated database or without browscap support at all.
 
-Browscap is a standalone class for PHP5 that gets around the limitations of
+Browscap is a standalone class for PHP >=5.3 that gets around the limitations of
 `get_browser()` and manages the whole thing.
 It offers methods to update, cache, adapt and get details about every supplied
 user agent on a standalone basis.
@@ -56,7 +56,7 @@ Here is a non-exaustive feature list of the Browscap class:
  * Auto updated browscap.ini file and cache from remote server with version checking
  * Configurable remote update server
  * Fully configurable (since 0.2)
- * <del>PHP4 and</del> PHP5 compatible (PHP4 version deprecated)
+ * <del>PHP4 and</del> PHP >=5.3 compatible (PHP <5.3 version deprecated)
  * Released under the MIT License
 
 
