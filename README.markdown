@@ -8,8 +8,11 @@ _Hacking around with PHP to have a better solution than `get_browser()`_
 Introduction
 ------------
 
-The [browscap.ini](http://browsers.garykeith.com/downloads.asp) file is a
-database maintained by [Gary Keith](http://browsers.garykeith.com/) which
+The [browscap.ini](http://tempdownloads.browserscap.com/) file is a
+database was maintained by [Gary Keith](https://github.com/GaretJax/) and is 
+now maintained by [RAD Moose](https://plus.google.com/u/0/114247395634091389252/).
+More information about the transfer of owners can be found here: https://groups.google.com/forum/#!topic/browscap/pk_dkkqdXzg
+The [browscap.ini](http://tempdownloads.browserscap.com/), which,
 provides a lot of details about browsers and their capabilities, such as name,
 versions, Javascript support and so on.
 
@@ -30,6 +33,10 @@ user agent on a standalone basis.
 
 Browscap is a [Composer](http://packagist.org/about-composer) package.
 
+
+Browscap is currently running on a temporary site (http://tempdownloads.browserscap.com/)
+while some things are sorted out and redone after a change of owners. For more
+information, look here: https://groups.google.com/d/msg/browscap/pk_dkkqdXzg/5ij0kxjCfocJ
 
 Quick start
 -----------
@@ -68,5 +75,5 @@ at https://github.com/GaretJax/phpbrowscap/issues
 
 Please note that the browscap class only parses and queries the browscap.ini
 database provided by Gary Keith. If a browser is wrongly identified or a results
-presents erroneous properties, please refer directly to the browscap project
-homepage at: http://browsers.garykeith.com/
+presents erroneous properties, please refer directly to the temporary browscap project
+homepage at: http://tempdownloads.browserscap.com/
