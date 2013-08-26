@@ -14,8 +14,8 @@ Introduction
 ------------
 
 The [browscap.ini](http://tempdownloads.browserscap.com/) file is a
-database was maintained by [Gary Keith](https://github.com/GaretJax/) and is 
-now maintained by [RAD Moose](https://plus.google.com/u/0/114247395634091389252/).
+database was maintained by [Gary Keith](https://github.com/GaryKeith) and is 
+now maintained by [RAD Moose](https://github.com/radmoose).
 More information about the transfer of owners can be found here: https://groups.google.com/forum/#!topic/browscap/pk_dkkqdXzg
 The [browscap.ini](http://tempdownloads.browserscap.com/), which,
 provides a lot of details about browsers and their capabilities, such as name,
@@ -53,7 +53,7 @@ https://github.com/GaretJax/phpbrowscap/wiki/QuickStart
 Features
 --------
 
-Here is a non-exaustive feature list of the Browscap class:
+Here is a non-exhaustive feature list of the Browscap class:
 
  * Fast
  * Standalone
@@ -78,7 +78,11 @@ Issues and feature requests
 Please report your issues and ask for new features on the GitHub Issue Tracker
 at https://github.com/GaretJax/phpbrowscap/issues
 
+Please report incorrectly identified User Agents and browser detect in the browscap.ini
+file on Google Groups here: https://groups.google.com/forum/#!forum/browscap
+
 Please note that the browscap class only parses and queries the browscap.ini
-database provided by Gary Keith. If a browser is wrongly identified or a results
+database provided by RAD Moose (previously by Gary Keith). If a browser is wrongly identified or a results
 presents erroneous properties, please refer directly to the temporary browscap project
-homepage at: http://tempdownloads.browserscap.com/
+homepage at: http://tempdownloads.browserscap.com/ or post your misidentified browser and User Agent at
+the Browscap Google Groups page: https://groups.google.com/forum/#!forum/browscap
