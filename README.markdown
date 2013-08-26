@@ -5,6 +5,11 @@ _Hacking around with PHP to have a better solution than `get_browser()`_
 
 [![Build Status](https://secure.travis-ci.org/GaretJax/phpbrowscap.png?branch=master)](http://travis-ci.org/GaretJax/phpbrowscap)
 
+Changes (new version - 2.0)
+-------
+
+Please see [changelog](CHANGELOG.md) for a list of recent changes. (huge performance improvements!)
+
 Introduction
 ------------
 
