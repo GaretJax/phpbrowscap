@@ -535,21 +535,26 @@ class Browscap
           
             if (empty($browsers[$user_agent]['Comment']) || strpos($user_agent, '*') !== false || strpos($user_agent, '?') !== false)
             {
-              $pattern = $this->_pregQuote($user_agent);
+                $pattern = $this->_pregQuote($user_agent);
+                
+                // undo quoting stars and dots
+                $temp_pattern = str_replace(array('.*', '.', '\?'), array('*', '?', '.'), $pattern);
+                
+                $matches_count = preg_match_all('@([\d\.]*[\d]+\.[\d]+)@', $temp_pattern, $matches);
   
-              $matches_count = preg_match_all('@\d@', $pattern, $matches);
+                if (!$matches_count) {
+                    $tmp_patterns[$pattern] = $i;
+                } else {
+                    $compressed_pattern = preg_replace('@([\d\.]*[\d]+\.[\d]+)@', '([\d\.]*[\d]+\.[\d]+)', $temp_pattern);
+                    // redo quoting stars and dots
+                    $compressed_pattern = str_replace(array('.', '?', '*', '([\\d\\\\.].*[\\d]+\\\\.[\\d]+)'), array('\.', '.', '.*', '([\d\.]*[\d]+\.[\d]+)'), $compressed_pattern);
+                    
+                    if (!isset($tmp_patterns[$compressed_pattern])) {
+                        $tmp_patterns[$compressed_pattern] = array('first' => $pattern);
+                    }
   
-              if (!$matches_count) {
-                $tmp_patterns[$pattern] = $i;
-              } else {
-                $compressed_pattern = preg_replace('@\d@', '(\d)', $pattern);
-  
-                if (!isset($tmp_patterns[$compressed_pattern])) {
-                  $tmp_patterns[$compressed_pattern] = array('first' => $pattern);
+                    $tmp_patterns[$compressed_pattern][$i] = $matches[0];
                 }
-  
-                $tmp_patterns[$compressed_pattern][$i] = $matches[0];
-              }
             }
 
             if (!empty($browsers[$user_agent]['Parent'])) {
@@ -623,7 +628,7 @@ class Browscap
      * 
      * All numbers are taken out into $matches, so we check if any of those numbers are identical
      * in all the $matches and if they are we restore them to the $pattern, removing from the $matches.
-     * This gives us patterns with "(\d)" only in places that differ for some matches.
+     * This gives us patterns with "([\d\.]*[\d]+\.[\d]+)" only in places that differ for some matches.
      * 
      * @param array $matches
      * @param string $pattern
@@ -652,7 +657,7 @@ class Browscap
         $prepared_matches[self::COMPRESSION_PATTERN_START . implode(self::COMPRESSION_PATTERN_DELIMITER, array_diff_assoc($some_match, $identical))] = $i;
       }
       
-      $pattern_parts = explode('(\d)', $pattern);
+      $pattern_parts = explode('([\d\.]*[\d]+\.[\d]+)', $pattern);
       
       foreach ($identical as $position => $value)
       {
@@ -660,7 +665,7 @@ class Browscap
         unset($pattern_parts[$position]);
       }
       
-      $pattern = implode('(\d)', $pattern_parts);
+      $pattern = implode('([\d\.]*[\d]+\.[\d]+)', $pattern_parts);
       
       return $prepared_matches;
     }
@@ -706,7 +711,7 @@ class Browscap
       {
         foreach ($matches as $one_match)
         {
-          $num_pos = strpos($result, '(\d)');
+          $num_pos = strpos($result, '([\d\.]*[\d]+\.[\d]+)');
           $result = substr_replace($result, $one_match, $num_pos, 4);
         }
       }
