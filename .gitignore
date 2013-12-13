@@ -1,6 +1,7 @@
 *~
 /.settings
 /.buildpath
+vendor/
+build/
 /.project
-/vendor
 /tests/output

@@ -4,7 +4,7 @@ before_commands:
 tools:
     # Code Coverage
     php_code_coverage:
-        enabled:              true
+        enabled:              false
         test_command:         phpunit
         filter:
             excluded_paths:
