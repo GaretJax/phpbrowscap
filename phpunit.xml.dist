@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<phpunit bootstrap="./bootstrap.php"
+<phpunit bootstrap="tests/bootstrap.php"
          verbose="false"
          stopOnError="false"
          stopOnFailure="false"
@@ -8,13 +8,18 @@
          convertErrorsToExceptions="true"
          convertNoticesToExceptions="true"
          convertWarningsToExceptions="true"
-         colors="false"
+         colors="true"
          forceCoversAnnotation="false"
          strict="false"
          processIsolation="false">
     <testsuites>
         <testsuite name="phpbrowscap Test Suite">
-            <directory>./phpbrowscap/</directory>
+            <directory>tests/phpbrowscap/</directory>
         </testsuite>
     </testsuites>
+    <filter>
+        <whitelist>
+            <directory suffix=".php">src/phpbrowscap/</directory>
+        </whitelist>
+    </filter>
 </phpunit>
