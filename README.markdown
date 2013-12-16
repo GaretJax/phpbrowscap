@@ -16,6 +16,7 @@ _Hacking around with PHP to have a better solution than `get_browser()`_
 [![Latest Unstable Version](https://poser.pugx.org/GaretJax/phpbrowscap/v/unstable.png)](https://packagist.org/packages/GaretJax/phpbrowscap)
 
 [![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/GaretJax/phpbrowscap/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+[![Total views](https://sourcegraph.com/api/repos/github.com/GaretJax/phpbrowscap/counters/views.png)](https://sourcegraph.com/github.com/GaretJax/phpbrowscap)
 
 
 Changes (new version - 2.0)
