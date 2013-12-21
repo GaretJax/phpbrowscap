@@ -1,4 +1,8 @@
 *~
 /.settings
 /.buildpath
+vendor/
+build/
 /.project
+/tests/output
+result.txt

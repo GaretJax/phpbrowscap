@@ -1,15 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
-<phpunit bootstrap="tests/bootstrap.php" colors="true">
+<phpunit bootstrap="./bootstrap.php"
+         verbose="false"
+         stopOnError="false"
+         stopOnFailure="false"
+         stopOnIncomplete="false"
+         stopOnSkipped="false"
+         convertErrorsToExceptions="true"
+         convertNoticesToExceptions="true"
+         convertWarningsToExceptions="true"
+         colors="false"
+         forceCoversAnnotation="false"
+         strict="false"
+         processIsolation="false">
     <testsuites>
         <testsuite name="phpbrowscap Test Suite">
-            <directory>tests/phpbrowscap/</directory>
+            <directory>./phpbrowscap/</directory>
         </testsuite>
     </testsuites>
-
-    <filter>
-        <whitelist>
-            <directory suffix=".php">src/phpbrowscap/</directory>
-        </whitelist>
-    </filter>
 </phpunit>

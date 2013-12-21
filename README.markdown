@@ -3,7 +3,20 @@ Browser Capabilities PHP Project
 
 _Hacking around with PHP to have a better solution than `get_browser()`_
 
-[![Build Status](https://secure.travis-ci.org/GaretJax/phpbrowscap.png?branch=master)](http://travis-ci.org/GaretJax/phpbrowscap)
+[![Build Status](https://travis-ci.org/GaretJax/phpbrowscap.png?branch=master)](https://travis-ci.org/GaretJax/phpbrowscap)
+[![Dependency Status](https://depending.in/GaretJax/phpbrowscap.png)](http://depending.in/GaretJax/phpbrowscap)
+
+[![Coverage Status](https://coveralls.io/repos/GaretJax/phpbrowscap/badge.png?branch=master)](https://coveralls.io/r/GaretJax/phpbrowscap?branch=master)
+[![Dependency Status](https://www.versioneye.com/user/projects/52a7612e632bac3d03000027/badge.png)](https://www.versioneye.com/user/projects/52a7612e632bac3d03000027)
+
+[![Scrutinizer Quality Score](https://scrutinizer-ci.com/g/GaretJax/phpbrowscap/badges/quality-score.png?s=fc8a4eebfebc543ba625cca857685b65973ed416)](https://scrutinizer-ci.com/g/GaretJax/phpbrowscap/) 
+[![Code Coverage](https://scrutinizer-ci.com/g/GaretJax/phpbrowscap/badges/coverage.png?s=0318faef2d8697e53d768a2e8af60ff133631c27)](https://scrutinizer-ci.com/g/GaretJax/phpbrowscap/)
+
+[![Latest Stable Version](https://poser.pugx.org/GaretJax/phpbrowscap/v/stable.png)](https://packagist.org/packages/GaretJax/phpbrowscap)
+[![Latest Unstable Version](https://poser.pugx.org/GaretJax/phpbrowscap/v/unstable.png)](https://packagist.org/packages/GaretJax/phpbrowscap)
+
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/GaretJax/phpbrowscap/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+[![Total views](https://sourcegraph.com/api/repos/github.com/GaretJax/phpbrowscap/counters/views.png)](https://sourcegraph.com/github.com/GaretJax/phpbrowscap)
 
 
 Changes (new version - 2.0)
