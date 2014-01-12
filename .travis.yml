@@ -1,6 +1,7 @@
 language: php
 
 php:
+  - 5.3.3
   - 5.3
   - 5.4
   - 5.5
@@ -11,6 +12,7 @@ matrix:
     - php: hhvm
 
 before_script:
+  - if [ "`phpenv version-name`" != "hhvm" ]; then echo "extension = curl.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini; fi
   - composer self-update
   - composer install --dev --prefer-source
   - php vendor/autoload.php
