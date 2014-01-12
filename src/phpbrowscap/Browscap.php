@@ -627,16 +627,19 @@ class Browscap
         if ($a_len > $b_len) {
             return -1;
         }
-        if ($a_len < $b_len)
+        if ($a_len < $b_len) {
             return 1;
+        }
 
         $a_len = strlen(str_replace(array('*', '?'), '', $a));
         $b_len = strlen(str_replace(array('*', '?'), '', $b));
 
-        if ($a_len > $b_len)
+        if ($a_len > $b_len) {
             return -1;
-        if ($a_len < $b_len)
+        }
+        if ($a_len < $b_len) {
             return 1;
+        }
 
         return 0;
     }
@@ -720,54 +723,8 @@ class Browscap
     {
         // list of escaped characters: http://www.php.net/manual/en/function.preg-quote.php
         // to properly unescape '?' which was changed to '.', I replace '\.' (real dot) with '\?', then change '.' to '?' and then '\?' to '.'.
-        $search  = array(
-            '\\' . self::REGEX_DELIMITER,
-            '\\.',
-            '\\\\',
-            '\\+',
-            '\\[',
-            '\\^',
-            '\\]',
-            '\\$',
-            '\\(',
-            '\\)',
-            '\\{',
-            '\\}',
-            '\\=',
-            '\\!',
-            '\\<',
-            '\\>',
-            '\\|',
-            '\\:',
-            '\\-',
-            '.*',
-            '.',
-            '\\?'
-        );
-        $replace = array(
-            self::REGEX_DELIMITER,
-            '\\?',
-            '\\',
-            '+',
-            '[',
-            '^',
-            ']',
-            '$',
-            '(',
-            ')',
-            '{',
-            '}',
-            '=',
-            '!',
-            '<',
-            '>',
-            '|',
-            ':',
-            '-',
-            '*',
-            '?',
-            '.'
-        );
+        $search  = array('\\' . self::REGEX_DELIMITER, '\\.', '\\\\', '\\+', '\\[', '\\^', '\\]', '\\$', '\\(', '\\)', '\\{', '\\}', '\\=', '\\!', '\\<', '\\>', '\\|', '\\:', '\\-', '.*', '.', '\\?');
+        $replace = array(self::REGEX_DELIMITER, '\\?', '\\', '+', '[', '^', ']', '$', '(', ')', '{', '}', '=', '!', '<', '>', '|', ':', '-', '*', '?', '.');
 
         $result = substr(str_replace($search, $replace, $pattern), 2, -2);
 
