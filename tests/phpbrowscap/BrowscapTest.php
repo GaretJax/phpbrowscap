@@ -1,8 +1,9 @@
 <?php
 
-namespace phpbrowscap;
+namespace phpbrowscapTest;
 
 use phpbrowscap\Browscap;
+use ReflectionClass;
 
 /**
  * Browscap.ini parsing class with caching and update capabilities
@@ -49,14 +50,14 @@ class BrowscapTest extends TestCase
         $browscap->autodetectProxySettings();
         $options = $browscap->getStreamContextOptions();
 
-        $this->assertEquals($options['http']['proxy'], 'tcp://proxy.example.com:3128');
-        $this->assertTrue($options['http']['request_fulluri']);
+        self::assertEquals($options['http']['proxy'], 'tcp://proxy.example.com:3128');
+        self::assertTrue($options['http']['request_fulluri']);
 
-        $this->assertEquals($options['https']['proxy'], 'tcp://proxy.example.com:3128');
-        $this->assertTrue($options['https']['request_fulluri']);
+        self::assertEquals($options['https']['proxy'], 'tcp://proxy.example.com:3128');
+        self::assertTrue($options['https']['request_fulluri']);
 
-        $this->assertEquals($options['ftp']['proxy'], 'tcp://proxy.example.com:3128');
-        $this->assertTrue($options['ftp']['request_fulluri']);
+        self::assertEquals($options['ftp']['proxy'], 'tcp://proxy.example.com:3128');
+        self::assertTrue($options['ftp']['request_fulluri']);
     }
 
     public function testAddProxySettings()
@@ -66,8 +67,8 @@ class BrowscapTest extends TestCase
         $browscap->addProxySettings('proxy.example.com', 3128, 'http');
         $options = $browscap->getStreamContextOptions();
 
-        $this->assertEquals($options['http']['proxy'], 'tcp://proxy.example.com:3128');
-        $this->assertTrue($options['http']['request_fulluri']);
+        self::assertEquals($options['http']['proxy'], 'tcp://proxy.example.com:3128');
+        self::assertTrue($options['http']['request_fulluri']);
     }
 
     public function testClearProxySettings()
@@ -77,33 +78,65 @@ class BrowscapTest extends TestCase
         $browscap->addProxySettings('proxy.example.com', 3128, 'http');
         $options = $browscap->getStreamContextOptions();
 
-        $this->assertEquals($options['http']['proxy'], 'tcp://proxy.example.com:3128');
-        $this->assertTrue($options['http']['request_fulluri']);
+        self::assertEquals($options['http']['proxy'], 'tcp://proxy.example.com:3128');
+        self::assertTrue($options['http']['request_fulluri']);
 
         $clearedWrappers = $browscap->clearProxySettings();
         $options = $browscap->getStreamContextOptions();
 
-        $this->assertEmpty($options);
-        $this->assertEquals($clearedWrappers, array('http'));
+        self::assertEmpty($options);
+        self::assertEquals($clearedWrappers, array('http'));
     }
 
     public function testGetStreamContext()
     {
         $cacheDir = $this->createCacheDir();
-        $browscap = new BrowscapForTest($cacheDir);
+
+        $class = new ReflectionClass('\\phpbrowscap\\Browscap');
+        $method = $class->getMethod('_getStreamContext');
+        $method->setAccessible(true);
+
+        $browscap = new Browscap($cacheDir);
 
         $browscap->addProxySettings('proxy.example.com', 3128, 'http');
 
-        $resource = $browscap->getStreamContext();
+        $resource = $method->invoke($browscap);
 
-        $this->assertTrue(is_resource($resource));
+        self::assertTrue(is_resource($resource));
     }
-}
 
-class BrowscapForTest extends Browscap
-{
-    public function getStreamContext($recreate = false)
+    /**
+     * @expectedException \phpbrowscap\Exception
+     * @expectedExceptionMessage Local file is not readable
+     */
+    public function testGetLocalMTime()
     {
-        return $this->_getStreamContext($recreate);
+        $cacheDir = $this->createCacheDir();
+
+        $class = new ReflectionClass('\\phpbrowscap\\Browscap');
+        $method = $class->getMethod('_getLocalMTime');
+        $method->setAccessible(true);
+
+        $browscap = new Browscap($cacheDir);
+
+        $method->invoke($browscap);
+    }
+
+    /**
+     *
+     */
+    public function testArray2string()
+    {
+        $cacheDir = $this->createCacheDir();
+
+        $class = new ReflectionClass('\\phpbrowscap\\Browscap');
+        $method = $class->getMethod('_array2string');
+        $method->setAccessible(true);
+
+        $browscap = new Browscap($cacheDir);
+
+        $result = 'array(' . "\n" . '\'a\'=>1,' . "\n" . '\'b\'=>\'abc\',' . "\n" . '1=>\'cde\',' . "\n" . '\'def\',' . "\n" . '\'a:3:{i:0;s:3:"abc";i:1;i:1;i:2;i:2;}\'' . "\n" . ')';
+
+        self::assertSame($result, $method->invoke($browscap, array('a' => 1, 'b' => 'abc', '1.0' => 'cde', 1 => 'def', 2 => array('abc', 1, 2))));
     }
 }
