@@ -18,7 +18,7 @@ before_script:
   - php vendor/autoload.php
 
 script:
-  - phpunit --configuration phpunit.xml.dist --colors --verbose
+  - phpunit --configuration phpunit.xml.dist --colors --verbose --coverage-text
 
 notifications:
   email: false
