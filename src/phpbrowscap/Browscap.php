@@ -716,7 +716,7 @@ class Browscap
      *
      * @return string
      */
-    protected function _pregUnQuote($pattern, $matches)
+    protected function _pregUnQuote($pattern, array $matches)
     {
         // list of escaped characters: http://www.php.net/manual/en/function.preg-quote.php
         // to properly unescape '?' which was changed to '.', I replace '\.' (real dot) with '\?', then change '.' to '?' and then '\?' to '.'.
@@ -841,7 +841,7 @@ class Browscap
      */
     protected function _getStreamContext($recreate = false)
     {
-        if (!isset($this->_streamContext) || true === $recreate) {
+        if (!is_resource($this->_streamContext) || true === $recreate) {
             $this->_streamContext = stream_context_create($this->_streamContextOptions);
         }
 
