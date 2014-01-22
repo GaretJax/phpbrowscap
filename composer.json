@@ -14,7 +14,13 @@
     "require": {
         "php": ">=5.3.0"
     },
+    "require-dev": {
+        "phpunit/phpunit": "*"
+    },
     "autoload": {
-        "psr-0": { "phpbrowscap": "src/" }
+        "psr-0": {
+            "phpbrowscap": "src/",
+            "phpbrowscapTest": "tests/"
+        }
     }
 }
