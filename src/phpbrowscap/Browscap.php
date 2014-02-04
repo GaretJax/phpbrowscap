@@ -43,7 +43,7 @@ class Browscap
     /**
      * Current version of the class.
      */
-    const VERSION = '2.0b';
+    const VERSION = '2.0';
     
     const CACHE_FILE_VERSION = '2.0b';
 
