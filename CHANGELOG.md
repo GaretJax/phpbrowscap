@@ -1,6 +1,9 @@
 Changelog
 -------
 
+### version 2.0 - February 4, 2014
+- Updated URLs to point to http://browscap.org/
+
 ### version 2.0b (beta) - August 25, 2013
 - Added a new method to retrieve the source file version `$browscap->getSourceVersion()`.
 - Added a safety feature to regenerate the cache file always when `Browscap::CACHE_FILE_VERSION` changes.
