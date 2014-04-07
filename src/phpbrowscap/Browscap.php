@@ -31,7 +31,7 @@ use \Exception as BaseException;
  *
  * @package    Browscap
  * @author     Jonathan Stoppani <jonathan@stoppani.name>
- * @author     Vítor Brandão <noisebleed@noiselabs.org>
+ * @author     Vítor Brandão <vitor@noiselabs.org>
  * @author     Mikołaj Misiurewicz <quentin389+phpb@gmail.com>
  * @copyright  Copyright (c) 2006-2012 Jonathan Stoppani
  * @version    1.0
