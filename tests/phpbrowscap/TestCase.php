@@ -2,8 +2,6 @@
 
 namespace phpbrowscap;
 
-use phpbrowscap\Browscap;
-
 /**
  * Browscap.ini parsing class with caching and update capabilities
  *

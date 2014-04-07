@@ -15,12 +15,12 @@ $x = new compareWithOriginal();
 class compareWithOriginal
 {
   public static $base_dir;
-  
+
   /**
    * @var Browscap
    */
   protected $browscap;
-  
+
   protected $warnings = array(
     'Mozilla/5.0 (compatible; MSIE 7.0; MSIE 6.0; ScanAlert; +http://www.scanalert.com/bot.jsp) Firefox/2.0.0.3',
     'Automated Browscap.ini Updater. To report issues contact us at+http://www.skycomp.ca',
@@ -60,14 +60,14 @@ class compareWithOriginal
     'SosospiderZ(+http://help.soso.com/webspider.htm)',
     'UniversalFeedParser/4. +http://feedparser.org/',
     'UniversalFeedParser/4.XY +http://feedparser.org/',
-    
+
     'Gigabot',
     'Lycos',
     'Nutch',
     'Research Projects',
     'BlackBerry',
     'Sleipnir',
-      
+
     'DefaultProperties',
     'Ask',
     'Baidu',
@@ -452,109 +452,99 @@ class compareWithOriginal
     'IE 8.0',
     'IE 9.0'
   );
-  
+
   protected $browscap_ini_path;
-  
+
   protected $user_agents = array();
-  
+
   protected $properties = array();
-  
+
   public function __construct()
   {
     $this->browscap = new Browscap(self::$base_dir . 'cache/');
-    
+
     $this->browscap_ini_path = ini_get('browscap');
-    
+
     $this->browscap->localFile = $this->browscap_ini_path;
     $this->browscap->updateMethod = Browscap::UPDATE_LOCAL;
-    
+
     $this->getUserAgents();
-    
+
     $this->checkProperties();
-    
+
     $this->runTest();
   }
-  
+
   protected function runTest()
   {
     echo "\n";
-    
+
     $errors_count = 0;
     $warnings_count = 0;
     $lib_time = 0;
     $lib_max_time = 0;
     $bc_time = 0;
     $bc_max_time = 0;
-    
-    foreach ($this->user_agents as $i => $user_agent)
-    {
+
+    foreach ($this->user_agents as $i => $user_agent) {
       $t = microtime(true);
       $lib_result = get_browser($user_agent);
       $ct = microtime(true) - $t;
       $lib_time += $ct;
       $lib_max_time = max($lib_max_time, $ct);
-      
+
       $t = microtime(true);
       $bc_result = $this->browscap->getBrowser($user_agent);
       $ct = microtime(true) - $t;
       $bc_time += $ct;
       $bc_max_time = max($bc_max_time, $ct);
-      
+
       $errors = array();
-      
-      if ($user_agent == Browscap::BROWSCAP_VERSION_KEY)
-      {
-        if ($this->browscap->getSourceVersion() != $lib_result->version)
-        {
+
+      if ($user_agent == Browscap::BROWSCAP_VERSION_KEY) {
+        if ($this->browscap->getSourceVersion() != $lib_result->version) {
           $errors[] = "Source file version incorrect: {$lib_result->version} != {$this->browscap->getSourceVersion()}";
         }
-      }
-      else foreach ($this->properties as $bc_prop => $lib_prop)
-      {
+      } else { foreach ($this->properties as $bc_prop => $lib_prop)
         $lib_value = $lib_result->{$lib_prop};
-        
+
         $bc_value = $bc_result->{$bc_prop};
-        
-        if ($lib_value != $bc_value)
-        {
+
+        if ($lib_value != $bc_value) {
           $errors[] = "$bc_prop: $lib_value != $bc_value";
         }
       }
-      
-      if ($errors && in_array($user_agent, $this->warnings))
-      {
+
+      if ($errors && in_array($user_agent, $this->warnings)) {
         $warnings_count++;
-        
+
         echo "get_browser() error fixed for '$user_agent'\n\n";
-      }
-      elseif ($errors)
-      {
+      } elseif ($errors) {
         $errors_count++;
-        
+
         $errors[] = "regex: '{$lib_result->browser_name_regex}' vs '{$bc_result->browser_name_regex}'";
-        
+
         echo "Errors for '$user_agent'\n" . implode("\n", $errors) . "\n\n";
       }
-      
-      if ($i % 500 == 0 && $i != 0)
-      {
+
+      if ($i % 500 == 0 && $i != 0) {
         $this->printReport($i, $errors_count, $warnings_count, $lib_time, $lib_max_time, $bc_time, $bc_max_time);
       }
     }
-    
+
     $this->printReport($i, $errors_count, $warnings_count, $lib_time, $lib_max_time, $bc_time, $bc_max_time);
   }
-  
+
   protected function printReport($i, $errors_count, $warnings_count, $lib_time, $lib_max_time, $bc_time, $bc_max_time)
   {
     $lt = number_format($lib_time, 2) . ' sec';
     $ltpp = number_format($lib_time / $i * 1000, 1) . ' ms / item';
     $ltm = number_format($lib_max_time * 1000, 1) . ' ms';
-    
+
     $bt = number_format($bc_time, 2) . ' sec';
     $btpp = number_format($bc_time / $i * 1000, 1) . ' ms / item';
     $btm = number_format($bc_max_time * 1000, 1) . ' ms';
-    
+
     echo "$i: report\n";
     echo "$errors_count errors\n";
     echo "$warnings_count get_browser() errors fixed\n";
@@ -562,79 +552,66 @@ class compareWithOriginal
         echo "bc time: $bt ($btpp, max $btm)\n";
         echo "\n";
   }
-  
+
   protected function checkProperties()
   {
     $lib_properties = get_object_vars(get_browser('x'));
-    
+
     $bc_properties = get_object_vars($this->browscap->getBrowser('x'));
-    
-    foreach (array_keys($bc_properties) as $bc_prop)
-    {
-      if ('browser_name' == $bc_prop)
-      {
+
+    foreach (array_keys($bc_properties) as $bc_prop) {
+      if ('browser_name' == $bc_prop) {
         continue;
       }
-      
-      if (!isset($lib_properties[strtolower($bc_prop)]))
-      {
+
+      if (!isset($lib_properties[strtolower($bc_prop)])) {
         throw new Exception("Property `$bc_prop` from Browscap doesn't match anything in get_browser.");
       }
-      
-      if ('browser_name_regex' != $bc_prop)
-      {
+
+      if ('browser_name_regex' != $bc_prop) {
         $this->properties[$bc_prop] = strtolower($bc_prop);
       }
-      
+
       unset($lib_properties[strtolower($bc_prop)]);
     }
-    
+
     unset($lib_properties['renderingengine_description']);
-    
-    if (!empty($lib_properties))
-    {
+
+    if (!empty($lib_properties)) {
       throw new Exception('There are ' . count($lib_properties) . '(' . implode(', ', array_keys($lib_properties)) . ') properties in get_browser that do not match those in Browscap.');
     }
   }
-  
+
   protected function getUserAgents()
   {
-    if (empty($this->browscap_ini_path))
-    {
+    if (empty($this->browscap_ini_path)) {
       throw new Exception("You have to have php.ini 'browscap' directive set to run this test.");
     }
-    
-    if (!is_file($this->browscap_ini_path))
-    {
+
+    if (!is_file($this->browscap_ini_path)) {
       throw new Exception("There is no browscap file at {$this->browscap_ini_path} location.");
     }
-    
-    if (version_compare(PHP_VERSION, '5.3.0', '>='))
-    {
+
+    if (version_compare(PHP_VERSION, '5.3.0', '>=')) {
       $browscap_data = parse_ini_file($this->browscap_ini_path, true, INI_SCANNER_RAW);
-    }
-    else
-    {
+    } else {
       $browscap_data = parse_ini_file($this->browscap_ini_path, true);
     }
-    
+
     $browscap_data = array_keys($browscap_data);
-    
+
     $this->user_agents = explode("\n", file_get_contents('user-agent-examples.txt'));
-    
+
     $this->user_agents[] = uniqid('Fake User Agent ', true);
-    
-    foreach ($browscap_data as $pattern)
-    {
+
+    foreach ($browscap_data as $pattern) {
       $this->user_agents[] = str_replace(array('?', '*'), array('Z', 'XY'), $pattern);
-      
-      if (false !== strpos($pattern, '*'))
-      {
+
+      if (false !== strpos($pattern, '*')) {
         $this->user_agents[] = str_replace(array('?', '*'), array('Z', ''), $pattern);
       }
     }
-    
+
     echo number_format(count($this->user_agents)) . " possible user agents\n";
   }
 }
-
