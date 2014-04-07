@@ -26,7 +26,7 @@
  * THE SOFTWARE.
  *
  * @package    Browscap
- * @author     Vítor Brandão <noisebleed@noiselabs.org>
+ * @author     Vítor Brandão <vitor@noiselabs.org>
  * @copyright  Copyright (c) 2006-2012 Jonathan Stoppani
  * @version    1.0
  * @license    http://www.opensource.org/licenses/MIT MIT License
@@ -35,11 +35,11 @@
 
 require_once __DIR__.'/phpbrowscap/TestCase.php';
 
-spl_autoload_register(function($class)
-{
+spl_autoload_register(function ($class) {
     $file = __DIR__.'/../src/'.strtr($class, '\\', '/').'.php';
     if (file_exists($file)) {
         require $file;
+
         return true;
     }
 });

@@ -2,8 +2,6 @@
 
 namespace phpbrowscap;
 
-use phpbrowscap\Browscap;
-
 /**
  * Browscap.ini parsing class with caching and update capabilities
  *
@@ -30,7 +28,7 @@ use phpbrowscap\Browscap;
  * THE SOFTWARE.
  *
  * @package    Browscap
- * @author     Vítor Brandão <noisebleed@noiselabs.org>
+ * @author     Vítor Brandão <vitor@noiselabs.org>
  * @copyright  Copyright (c) 2006-2012 Jonathan Stoppani
  * @version    1.0
  * @license    http://www.opensource.org/licenses/MIT MIT License
