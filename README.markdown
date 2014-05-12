@@ -20,9 +20,9 @@ provides a lot of details about browsers and their capabilities, such as name,
 versions, Javascript support and so on.
 
 _Please note: [browscap.ini](http://tempdownloads.browserscap.com/) was maintained by [Gary Keith](https://github.com/GaryKeith) and is 
-now maintained by [RAD Moose](https://github.com/radmoose). More information about the transfer of owners can be found [here](https://groups.google.com/forum/#!topic/browscap/pk_dkkqdXzg).
-Browscap.ini source files are currently available at a temporary location (http://tempdownloads.browserscap.com/).
-All the links in `Browscap` class are updated, but if you use custom links remember to change them!_
+now maintained by [RAD Moose](https://github.com/radmoose). More information about the transfer of owners can be found [here](https://groups.google.com/forum/#!topic/browscap/pk_dkkqdXzg)._
+Browscap.ini source files are now officially available at http://browscap.org/.
+All the links in `Browscap` class are updated, but if you use custom links remember to change them!
 
 PHP's native [get_browser()](http://php.net/get_browser) function parses this
 file and provides you with a complete set of information about every browser's
