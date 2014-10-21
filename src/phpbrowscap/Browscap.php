@@ -274,18 +274,20 @@ class Browscap
             }
             
             $update_cache = true;
-            
+            $forcecacheupdate = false;       //< think positive, only update cache on new ini file downloads
+
             if (file_exists($cache_file) && file_exists($ini_file) && ($interval <= $this->updateInterval))
             {
               if ($this->_loadCache($cache_file))
               {
                 $update_cache = false;
               }
+              else $forcecacheupdate = true; //< if cache file couldn't load, force update cache file
             }
             
             if ($update_cache) {
                 try {
-                    $this->updateCache();
+                    $this->updateCache($forcecacheupdate);
                 } catch (Exception $e) {
                     if (file_exists($ini_file)) {
                         // Adjust the filemtime to the $errorInterval
@@ -486,7 +488,7 @@ class Browscap
      *
      * @return bool whether the file was correctly written to the disk
      */
-    public function updateCache()
+    public function updateCache($forcecacheupdate = false)
     {
         $ini_path = $this->cacheDir . $this->iniFilename;
         $cache_path = $this->cacheDir . $this->cacheFilename;
@@ -498,107 +500,111 @@ class Browscap
             $url = $this->remoteIniUrl;
         }
 
-        $this->_getRemoteIniFile($url, $ini_path);
+        $downloadednewini = $this->_getRemoteIniFile($url, $ini_path);
 
-        if (version_compare(PHP_VERSION, '5.3.0', '>=')) {
-            $browsers = parse_ini_file($ini_path, true, INI_SCANNER_RAW);
-        } else {
-            $browsers = parse_ini_file($ini_path, true);
-        }
-        
-        $this->_source_version = $browsers[self::BROWSCAP_VERSION_KEY]['Version'];
-        unset($browsers[self::BROWSCAP_VERSION_KEY]);
-        
-        unset($browsers['DefaultProperties']['RenderingEngine_Description']);
-
-        $this->_properties = array_keys($browsers['DefaultProperties']);
-        
-        array_unshift(
-            $this->_properties,
-            'browser_name',
-            'browser_name_regex',
-            'browser_name_pattern',
-            'Parent'
-        );
-        
-        $tmp_user_agents = array_keys($browsers);
-        
-
-        usort($tmp_user_agents, array($this, 'compareBcStrings'));
-
-        $user_agents_keys = array_flip($tmp_user_agents);
-        $properties_keys = array_flip($this->_properties);
-
-        $tmp_patterns = array();
-
-        foreach ($tmp_user_agents as $i => $user_agent) {
-          
-            if (empty($browsers[$user_agent]['Comment']) || strpos($user_agent, '*') !== false || strpos($user_agent, '?') !== false)
-            {
-              $pattern = $this->_pregQuote($user_agent);
-  
-              $matches_count = preg_match_all('@\d@', $pattern, $matches);
-  
-              if (!$matches_count) {
-                $tmp_patterns[$pattern] = $i;
-              } else {
-                $compressed_pattern = preg_replace('@\d@', '(\d)', $pattern);
-  
-                if (!isset($tmp_patterns[$compressed_pattern])) {
-                  $tmp_patterns[$compressed_pattern] = array('first' => $pattern);
-                }
-  
-                $tmp_patterns[$compressed_pattern][$i] = $matches[0];
-              }
-            }
-
-            if (!empty($browsers[$user_agent]['Parent'])) {
-                $parent = $browsers[$user_agent]['Parent'];
-                $parent_key = $user_agents_keys[$parent];
-                $browsers[$user_agent]['Parent'] = $parent_key;
-                $this->_userAgents[$parent_key . '.0'] = $tmp_user_agents[$parent_key];
-            };
-
-            $browser = array();
-            foreach ($browsers[$user_agent] as $key => $value) {
-                if (!isset($properties_keys[$key]))
-                {
-                  continue;
-                }
-                
-                $key = $properties_keys[$key];
-                $browser[$key] = $value;
+        // if downloaded new remote ini file, or forced a cache update or cache doesn't exist: update cache
+        if ($downloadednewini || $forcecacheupdate || !file_exists($cache_path)) {
+            if (version_compare(PHP_VERSION, '5.3.0', '>=')) {
+                $browsers = parse_ini_file($ini_path, true, INI_SCANNER_RAW);
+            } else {
+                $browsers = parse_ini_file($ini_path, true);
             }
             
+            $this->_source_version = $browsers[self::BROWSCAP_VERSION_KEY]['Version'];
+            unset($browsers[self::BROWSCAP_VERSION_KEY]);
+            
+            unset($browsers['DefaultProperties']['RenderingEngine_Description']);
 
-            $this->_browsers[] = $browser;
+            $this->_properties = array_keys($browsers['DefaultProperties']);
+            
+            array_unshift(
+                $this->_properties,
+                'browser_name',
+                'browser_name_regex',
+                'browser_name_pattern',
+                'Parent'
+            );
+            
+            $tmp_user_agents = array_keys($browsers);
+            
+
+            usort($tmp_user_agents, array($this, 'compareBcStrings'));
+
+            $user_agents_keys = array_flip($tmp_user_agents);
+            $properties_keys = array_flip($this->_properties);
+
+            $tmp_patterns = array();
+
+            foreach ($tmp_user_agents as $i => $user_agent) {
+              
+                if (empty($browsers[$user_agent]['Comment']) || strpos($user_agent, '*') !== false || strpos($user_agent, '?') !== false)
+                {
+                  $pattern = $this->_pregQuote($user_agent);
+      
+                  $matches_count = preg_match_all('@\d@', $pattern, $matches);
+      
+                  if (!$matches_count) {
+                    $tmp_patterns[$pattern] = $i;
+                  } else {
+                    $compressed_pattern = preg_replace('@\d@', '(\d)', $pattern);
+      
+                    if (!isset($tmp_patterns[$compressed_pattern])) {
+                      $tmp_patterns[$compressed_pattern] = array('first' => $pattern);
+                    }
+      
+                    $tmp_patterns[$compressed_pattern][$i] = $matches[0];
+                  }
+                }
+
+                if (!empty($browsers[$user_agent]['Parent'])) {
+                    $parent = $browsers[$user_agent]['Parent'];
+                    $parent_key = $user_agents_keys[$parent];
+                    $browsers[$user_agent]['Parent'] = $parent_key;
+                    $this->_userAgents[$parent_key . '.0'] = $tmp_user_agents[$parent_key];
+                };
+
+                $browser = array();
+                foreach ($browsers[$user_agent] as $key => $value) {
+                    if (!isset($properties_keys[$key]))
+                    {
+                      continue;
+                    }
+                    
+                    $key = $properties_keys[$key];
+                    $browser[$key] = $value;
+                }
+                
+
+                $this->_browsers[] = $browser;
+            }
+
+            foreach ($tmp_patterns as $pattern => $pattern_data) {
+              if (is_int($pattern_data)) {
+                $this->_patterns[$pattern] = $pattern_data;
+              } elseif (2 == count($pattern_data)) {
+                end($pattern_data);
+                $this->_patterns[$pattern_data['first']] = key($pattern_data);
+              } else {
+                unset($pattern_data['first']);
+
+                $pattern_data = $this->deduplicateCompressionPattern($pattern_data, $pattern);
+
+                $this->_patterns[$pattern] = $pattern_data;
+              }
+            }
+            
+            // Save the keys lowercased if needed
+            if ($this->lowercase) {
+                $this->_properties = array_map('strtolower', $this->_properties);
+            }
+
+            // Get the whole PHP code
+            $cache = $this->_buildCache();
+
+            // Save and return
+            return (bool) file_put_contents($cache_path, $cache, LOCK_EX);
         }
-
-        foreach ($tmp_patterns as $pattern => $pattern_data) {
-          if (is_int($pattern_data)) {
-            $this->_patterns[$pattern] = $pattern_data;
-          } elseif (2 == count($pattern_data)) {
-            end($pattern_data);
-            $this->_patterns[$pattern_data['first']] = key($pattern_data);
-          } else {
-            unset($pattern_data['first']);
-
-            $pattern_data = $this->deduplicateCompressionPattern($pattern_data, $pattern);
-
-            $this->_patterns[$pattern] = $pattern_data;
-          }
-        }
-        
-        // Save the keys lowercased if needed
-        if ($this->lowercase) {
-            $this->_properties = array_map('strtolower', $this->_properties);
-        }
-
-        // Get the whole PHP code
-        $cache = $this->_buildCache();
-
-        // Save and return
-        return (bool) file_put_contents($cache_path, $cache, LOCK_EX);
+        return false;
     }
     
     protected function compareBcStrings($a, $b)
@@ -805,8 +811,6 @@ class Browscap
 
             if ($remote_tmstp < $local_tmstp) {
                 // No update needed, return
-                touch($path);
-
                 return false;
             }
         }
