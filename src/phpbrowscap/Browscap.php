@@ -814,8 +814,13 @@ class Browscap
         // Get updated .ini file
         $browscap = $this->_getRemoteData($url);
 
+        // $browscap = explode("\n", $browscap);
 
-        $browscap = explode("\n", $browscap);
+        $tmppath = $path.'.tmp';
+		if (!file_put_contents($tmppath, $browscap)) {
+			throw new Exception("Could not write temp .ini content to $path");
+		}
+        unset($browscap);
 
         $pattern = self::REGEX_DELIMITER
                  . '('
@@ -823,13 +828,23 @@ class Browscap
                  . ')="?([^"]*)"?$'
                  . self::REGEX_DELIMITER;
 
-
+		$content = '';
+		$fh = fopen($tmpath,'r');
+		while (!feof($fh)) {
+			$subject = trim(fgets($fh));
+			$content .= preg_replace($pattern, '$1="$2"', $subject) . "\n";
+		}
+		if (!file_put_contents($path, $content)) {
+			throw new Exception("Could not write .ini content to $path");
+		}
+		@unlink($tmppath);
+		
         // Ok, lets read the file
-        $content = '';
-        foreach ($browscap as $subject) {
-            $subject = trim($subject);
-            $content .= preg_replace($pattern, '$1="$2"', $subject) . "\n";
-        }
+        // $content = '';
+        // foreach ($browscap as $subject) {
+        //    $subject = trim($subject);
+        //    $content .= preg_replace($pattern, '$1="$2"', $subject) . "\n";
+        // }
 
         if ($url != $path) {
             if (!file_put_contents($path, $content)) {
