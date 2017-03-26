@@ -374,7 +374,9 @@ class Browscap
             }
             $array[$this->_properties[$key]] = $value;
         }
-
+        $browserKey = "Browser";
+        if (isset($array[$browserKey]))
+            $array[$browserKey] = $array[$browserKey] == "Chromium" ? "Chrome" : $array[$browserKey];
         return $return_array ? $array : (object) $array;
     }
 
