@@ -481,10 +481,11 @@ class Browscap
 
     /**
      * XXX save
-     * 
+     *
      * Parses the ini file and updates the cache files
      *
      * @return bool whether the file was correctly written to the disk
+     * @throws Exception
      */
     public function updateCache()
     {
@@ -1045,6 +1046,7 @@ class Browscap
  * @copyright  Copyright (c) 2006-2012 Jonathan Stoppani
  * @version    1.0
  * @license    http://www.opensource.org/licenses/MIT MIT License
- * @link       https://github.com/GaretJax/phpbrowscap/*/
+ * @link       https://github.com/GaretJax/phpbrowscap/
+ */
 class Exception extends BaseException
 {}
