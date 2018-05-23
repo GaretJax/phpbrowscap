@@ -814,8 +814,11 @@ class Browscap
         // Get updated .ini file
         $browscap = $this->_getRemoteData($url);
 
-
-        $browscap = explode("\n", $browscap);
+        // Split array to smaller pieces
+        $bc_chunks = [];
+        $browscap = str_split($browscap, 10000);
+        foreach ($browscap as $chunk) { $bc_chunks = array_merge($bc_chunks, explode("\n", $chunk)); };
+        $browscap = $bc_chunks;
 
         $pattern = self::REGEX_DELIMITER
                  . '('
